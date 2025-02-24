@@ -1,6 +1,10 @@
-import {} from '../lib/hashtables'
+import {ChainingHashtable, ch_empty, ch_insert, ch_lookup, HashFunction} from '../lib/hashtables'
+import * as PromptSync from "prompt-sync";
 
-type account = {
+const prompt: PromptSync.Prompt = PromptSync();
+
+
+export type account = {
     name: string,
     age: number,
     psswd: string,
@@ -12,13 +16,20 @@ type hash = string
 
 type session = [account, hash]
 
-const hasth_table_hash = x => x = x;
-const psswd_hash = x => x = x;
+export function hash_id (username:string): number {
+    let hash = 0;
+    for (let i = 0; i < username.length; i++) {
+      hash += username.charCodeAt(i);
+    }
+    return hash;
+  }
+  const psswd_hash = (x: string) => x;
 
-function login_input (statement:string): string | null | number {
+function login_input (statement: string): string {
     console.log(statement)
-    return prompt("> ")
-} 
+    const response = prompt("> ", "17")
+    return response!
+}
 function create_acc (): account{
     let new_age;
     let new_name;
@@ -47,22 +58,33 @@ function create_acc (): account{
     }
     return {
         name: new_name,
-        age: new_age,
+        age: new_age!,
         psswd: hashed_psswd,
         savings: starting_amount,
         rank: starting_rank
     }
 }
 function login_acc (){
-
+    ch_lookup
 }
 
 // function retrieve_update_ranks()
 
 // export function ranked_heaps()
 
-export function main_login_loop(): void{
-    const user = create_acc();
-
-
+export function main_login_loop(hash_table: ChainingHashtable<string,account>): void{
+    const user:account = create_acc();
+    ch_insert(hash_table, user.name, user);
+    console.log(ch_lookup(hash_table, user.name));
 }
+
+
+
+
+// const fs = require('fs');
+
+// var myVariable = "Hello, world!";
+// fs.writeFile('myVariable.txt', myVariable, (err) => {
+//     if (err) throw err;
+//     console.log('File is created successfully.');
+// });
