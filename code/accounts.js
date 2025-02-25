@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.hash_id = hash_id;
 exports.main_login_loop = main_login_loop;
 var hashtables_1 = require("../lib/hashtables");
 var PromptSync = require("prompt-sync");
@@ -43,22 +44,52 @@ function create_acc() {
         age: new_age,
         psswd: hashed_psswd,
         savings: starting_amount,
-        rank: starting_rank
+        rank: starting_rank,
     };
 }
-function login_acc() {
-    hashtables_1.ch_lookup;
+//account login
+function login_acc(accounts) {
+    var username = login_input("Enter username");
+    var password = login_input("Enter password");
+    var hashed_password = psswd_hash(password);
+    var usr = (0, hashtables_1.ch_lookup)(accounts, username);
+    if (usr && usr.psswd === hashed_password) {
+        console.log("Login successful");
+        return usr;
+    }
+    else {
+        console.log("Invalid username or password");
+        return null;
+    }
 }
 // function retrieve_update_ranks()
 // export function ranked_heaps()
+/**
+ * Function spec
+ * @param hash_table
+ * @returns session, the user information and which hashtable that gets used
+ */
 function main_login_loop(hash_table) {
-    var user = create_acc();
-    (0, hashtables_1.ch_insert)(hash_table, user.name, user);
-    console.log((0, hashtables_1.ch_lookup)(hash_table, user.name));
-    console.log("Done");
+    while (true) {
+        var selection = login_input("Create account or login? C: create, L: login");
+        if (selection === "C") {
+            var user = create_acc();
+            (0, hashtables_1.ch_insert)(hash_table, user.name, user);
+            return [user, hash_table];
+        }
+        else if (selection === "Login") {
+            var user = login_acc(hash_table);
+            if (user) {
+                console.log("Logged in as", user.name);
+                return [user, hash_table];
+            }
+        }
+        else {
+            console.log("Invalid selection");
+            continue;
+        }
+    }
 }
-var empty_chain = (0, hashtables_1.ch_empty)(12, hash_id);
-main_login_loop(empty_chain);
 // const fs = require('fs');
 // var myVariable = "Hello, world!";
 // fs.writeFile('myVariable.txt', myVariable, (err) => {
