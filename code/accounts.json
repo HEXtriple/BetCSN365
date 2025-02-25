@@ -1,0 +1,9 @@
+{
+  "Guest": {
+    "name": "Guest",
+    "psswd": "Guest",
+    "savings": 300,
+    "rank": 0,
+    "profit": 0
+  }
+}

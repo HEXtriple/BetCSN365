@@ -13,9 +13,9 @@ function hash_id(username) {
     return hash;
 }
 var psswd_hash = function (x) { return x; };
-function login_input(statement) {
+function login_input(statement, guest) {
     console.log(statement);
-    var response = prompt("> ", "17");
+    var response = prompt("> ", guest);
     return response;
 }
 function create_acc() {
@@ -27,14 +27,14 @@ function create_acc() {
     var starting_rank = 0;
     console.log("Welcome to the account setup \n  --------------");
     while (true) {
-        var new_age_1 = Number(login_input("Please enter age"));
+        var new_age_1 = Number(login_input("Please enter age", "18"));
         if (new_age_1 < 18) {
             console.log("Must be over the age of 18");
             continue;
         }
         else {
-            new_name = login_input("Enter name");
-            new_passwd = login_input("Enter passwd");
+            new_name = login_input("Enter name", "Guest");
+            new_passwd = login_input("Enter passwd", "Guest");
             hashed_psswd = psswd_hash(new_passwd);
             break;
         }
@@ -45,12 +45,13 @@ function create_acc() {
         psswd: hashed_psswd,
         savings: starting_amount,
         rank: starting_rank,
+        profit: starting_rank,
     };
 }
 //account login
 function login_acc(accounts) {
-    var username = login_input("Enter username");
-    var password = login_input("Enter password");
+    var username = login_input("Enter username", "Guest");
+    var password = login_input("Enter password", "Guest");
     var hashed_password = psswd_hash(password);
     var usr = (0, hashtables_1.ch_lookup)(accounts, username);
     if (usr && usr.psswd === hashed_password) {
@@ -71,13 +72,13 @@ function login_acc(accounts) {
  */
 function main_login_loop(hash_table) {
     while (true) {
-        var selection = login_input("Create account or login? C: create, L: login");
-        if (selection === "C") {
+        var selection = login_input("Create account or login? C: create, L: login", "");
+        if (selection.toLowerCase() === "c") {
             var user = create_acc();
             (0, hashtables_1.ch_insert)(hash_table, user.name, user);
             return [user, hash_table];
         }
-        else if (selection === "Login") {
+        else if (selection.toLowerCase() === "l" || "login") {
             var user = login_acc(hash_table);
             if (user) {
                 console.log("Logged in as", user.name);
@@ -90,9 +91,3 @@ function main_login_loop(hash_table) {
         }
     }
 }
-// const fs = require('fs');
-// var myVariable = "Hello, world!";
-// fs.writeFile('myVariable.txt', myVariable, (err) => {
-//     if (err) throw err;
-//     console.log('File is created successfully.');
-// });

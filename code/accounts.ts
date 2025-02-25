@@ -14,6 +14,7 @@ export type account = {
   age: number;
   psswd: string;
   savings: number;
+  profit: number;
   rank: number; //kan kollas från en max-heap med avseende på antalet hopp
 };
 
@@ -28,9 +29,9 @@ export function hash_id(username: string): number {
 }
 const psswd_hash = (x: string) => x;
 
-function login_input(statement: string): string {
+function login_input(statement: string, guest: string): string {
   console.log(statement);
-  const response = prompt("> ", "17");
+  const response = prompt("> ", guest);
   return response!;
 }
 function create_acc(): account {
@@ -45,13 +46,13 @@ function create_acc(): account {
   console.log("Welcome to the account setup \n  --------------");
 
   while (true) {
-    let new_age: number = Number(login_input("Please enter age"));
+    let new_age: number = Number(login_input("Please enter age", "18"));
     if (new_age < 18) {
       console.log("Must be over the age of 18");
       continue;
     } else {
-      new_name = login_input("Enter name");
-      new_passwd = login_input("Enter passwd");
+      new_name = login_input("Enter name", "Guest");
+      new_passwd = login_input("Enter passwd", "Guest");
       hashed_psswd = psswd_hash(new_passwd);
       break;
     }
@@ -62,6 +63,7 @@ function create_acc(): account {
     psswd: hashed_psswd,
     savings: starting_amount,
     rank: starting_rank,
+    profit: starting_rank,
   };
 }
 
@@ -69,8 +71,8 @@ function create_acc(): account {
 function login_acc(
   accounts: ChainingHashtable<string, account>,
 ): account | null {
-  let username = login_input("Enter username");
-  let password = login_input("Enter password");
+  let username = login_input("Enter username", "Guest");
+  let password = login_input("Enter password", "Guest");
   let hashed_password = psswd_hash(password);
   let usr: account | undefined = ch_lookup(accounts, username);
   if (usr && usr.psswd === hashed_password) {
@@ -94,14 +96,15 @@ export function main_login_loop(
   hash_table: ChainingHashtable<string, account>,
 ): session {
   while (true) {
-    const selection = login_input(
+    let selection = login_input(
       "Create account or login? C: create, L: login",
+      "",
     );
-    if (selection === "C") {
+    if (selection.toLowerCase() === "c") {
       const user: account = create_acc();
       ch_insert(hash_table, user.name, user);
       return [user, hash_table];
-    } else if (selection === "Login") {
+    } else if (selection.toLowerCase() === "l" || "login") {
       const user = login_acc(hash_table);
       if (user) {
         console.log("Logged in as", user.name);
@@ -113,11 +116,3 @@ export function main_login_loop(
     }
   }
 }
-
-// const fs = require('fs');
-
-// var myVariable = "Hello, world!";
-// fs.writeFile('myVariable.txt', myVariable, (err) => {
-//     if (err) throw err;
-//     console.log('File is created successfully.');
-// });
