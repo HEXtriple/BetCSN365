@@ -1,4 +1,0 @@
-\contentsline {section}{\numberline {1}Numrerad Lista}{1}{}%
-\contentsline {section}{\numberline {2}Ekvation}{1}{}%
-\contentsline {section}{\numberline {3}Bild}{2}{}%
-\contentsline {section}{\numberline {4}Citat}{2}{}%
