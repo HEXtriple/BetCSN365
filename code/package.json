@@ -6,6 +6,7 @@
   "dependencies": {
     "fs": "^0.0.1-security",
     "fs-extra": "^11.3.0",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "readline-sync": "^1.4.10"
   }
 }
