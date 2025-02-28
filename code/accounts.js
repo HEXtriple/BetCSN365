@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hash_id = hash_id;
 exports.main_login_loop = main_login_loop;
+exports.update_user = update_user;
 var hashtables_1 = require("../lib/hashtables");
+var accounts_write_1 = require("./accounts_write");
 var PromptSync = require("prompt-sync");
 var prompt = PromptSync();
 function hash_id(username) {
@@ -90,4 +92,12 @@ function main_login_loop(hash_table) {
             continue;
         }
     }
+}
+function update_user(_a) {
+    var user = _a[0], hash_table = _a[1];
+    var search = (0, hashtables_1.ch_lookup)(hash_table, user.name);
+    (0, hashtables_1.ch_delete)(hash_table, user.name);
+    (0, hashtables_1.ch_insert)(hash_table, user.name, user);
+    (0, accounts_write_1.saveAccounts)(hash_table);
+    return;
 }

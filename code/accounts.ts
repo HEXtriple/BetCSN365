@@ -4,7 +4,9 @@ import {
   ch_insert,
   ch_lookup,
   HashFunction,
+  ch_delete,
 } from "../lib/hashtables";
+import { saveAccounts, loadAccounts } from "./accounts_write";
 import * as PromptSync from "prompt-sync";
 
 const prompt: PromptSync.Prompt = PromptSync();
@@ -18,7 +20,7 @@ export type account = {
   rank: number; //kan kollas från en max-heap med avseende på antalet hopp
 };
 
-type session = [account, ChainingHashtable<account["name"], account>];
+export type session = [account, ChainingHashtable<account["name"], account>];
 
 export function hash_id(username: string): number {
   let hash = 0;
@@ -115,4 +117,12 @@ export function main_login_loop(
       continue;
     }
   }
+}
+
+export function update_user([user, hash_table]: session): void {
+  const search = ch_lookup(hash_table, user.name);
+  ch_delete(hash_table, user.name);
+  ch_insert(hash_table, user.name, user);
+  saveAccounts(hash_table);
+  return;
 }

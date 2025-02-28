@@ -2,6 +2,13 @@
   "Guest": {
     "name": "Guest",
     "psswd": "Guest",
+    "savings": 230,
+    "rank": 0,
+    "profit": 0
+  },
+  "03Mille": {
+    "name": "03Mille",
+    "psswd": "123",
     "savings": 300,
     "rank": 0,
     "profit": 0
